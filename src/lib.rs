@@ -78,16 +78,12 @@ impl Entry {
     }
 }
 
-pub fn format_size(size: u64, binary: bool) -> String {
-    let formatted = if binary {
-        NumberPrefix::binary(size as f64)
-    } else {
-        NumberPrefix::decimal(size as f64)
-    };
+pub fn format_size(size: u64) -> String {
+    let formatted = NumberPrefix::binary(size as f64);
 
     match formatted {
         NumberPrefix::Standalone(number) => {
-            let padding = if binary { "   " } else { "  " };
+            let padding = "   ";
             format!("{}{}B", number as u64, padding)
         }
         NumberPrefix::Prefixed(prefix, number) => format!("{:.2} {}B", number, prefix),

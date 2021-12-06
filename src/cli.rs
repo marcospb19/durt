@@ -12,10 +12,6 @@ pub struct Cli {
     /// Paths to files or directories. Use wildcards for recursion
     pub paths: Vec<PathBuf>,
 
-    #[clap(short = "b", long = "binary")]
-    /// Use binary prefixes (Ki, Mi, Gi, etc.) instead of decimal
-    pub use_binary_prefixes: bool,
-
     #[clap(short = "P", long = "percentage")]
     /// Show each entry's percentage relative to the total
     pub show_percentages: bool,
@@ -23,10 +19,6 @@ pub struct Cli {
     #[clap(short, long = "min")]
     /// Omit entries with size less than this
     pub minimum_percentage: Option<f64>,
-
-    #[clap(short = "t", long = "total")]
-    /// Print the sum of all sizes at the end
-    pub show_total: bool,
 
     #[clap(short, long)]
     /// Print entries in ascending order of size

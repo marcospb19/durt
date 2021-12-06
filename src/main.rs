@@ -1,8 +1,8 @@
+mod cli;
+
 use clap::{Clap, IntoApp};
 use tabular::{Row, Table};
-use wild;
 
-mod cli;
 use cli::Cli;
 use durt::{calculate_unique_total_size, format_size, Entry};
 
@@ -17,7 +17,7 @@ fn main() {
         return;
     }
 
-    let all_entries = cli.paths.iter().filter_map(|path| Entry::from_path(&path));
+    let all_entries = cli.paths.iter().filter_map(|path| Entry::from_path(path));
     let mut entries: Vec<Entry>;
 
     #[cfg(unix)]
@@ -73,7 +73,7 @@ fn main() {
             }
         }
 
-        let formatted_size = format_size(entry.size, cli.use_binary_prefixes);
+        let formatted_size = format_size(entry.size);
         let mut row = Row::new().with_cell(formatted_size);
 
         if cli.show_percentages {
@@ -100,26 +100,25 @@ fn main() {
         table.add_row(row);
     }
 
-    if cli.show_total {
-        let separator = "-".repeat(if cli.use_binary_prefixes { 10 } else { 9 });
-        let mut row = Row::new().with_cell(separator);
+    // Shows total
+    let separator = "-".repeat(10);
+    let mut row = Row::new().with_cell(separator);
 
-        if cli.show_percentages {
-            row.add_cell("");
-        }
-
-        table.add_row(row.with_cell(""));
-
-        let formatted_total = format_size(total_size, cli.use_binary_prefixes);
-        let mut row = Row::new().with_cell(formatted_total);
-
-        if cli.show_percentages {
-            row.add_cell("");
-        }
-
-        row.add_cell("(total)");
-        table.add_row(row);
+    if cli.show_percentages {
+        row.add_cell("");
     }
+
+    table.add_row(row.with_cell(""));
+
+    let formatted_total = format_size(total_size);
+    let mut row = Row::new().with_cell(formatted_total);
+
+    if cli.show_percentages {
+        row.add_cell("");
+    }
+
+    row.add_cell("(total)");
+    table.add_row(row);
 
     print!("{}", table);
 }
